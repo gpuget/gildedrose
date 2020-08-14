@@ -5,94 +5,174 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GildedRoseTest {
-	private static final String NAME = "Normal Sword";
+	private static final int DEFAULT_ITEM_VALUE = 10;
 
 	@Test
-	public void givenItem_whenUpdate_thenSellInAndQualityLower() {
-		givenItem_whenUpdate_thenExpected(new Item(NAME, 1, 1), new Item(NAME, 0, 0));
-	}
-
-	@Test
-	public void givenItemWithZeroQuality_whenUpdate_thenQualityNotNegative() {
-		givenItem_whenUpdate_thenExpected(new Item(NAME, 0, 0), new Item(NAME, -1, 0));
+	public void givenNormalItem_whenUpdate_thenQualityDecreasedBy1() {
+		TestBuilder.givenNormalItem().whenUpdate().thenQualityDecreasedBy(1);
 	}
 
 	@Test
-	public void givenItemWithSellNegative_whenUpdate_thenQualityDecreasedBy2() {
-		givenItem_whenUpdate_thenExpected(new Item(NAME, -1, 2), new Item(NAME, -2, 0));
+	public void givenNormalItemAndZeroSellIn_whenUpdate_thenQualityDecreasedBy2() {
+		TestBuilder.givenNormalItem().andZeroSellIn().whenUpdate().thenQualityDecreasedBy(2);
 	}
 
 	@Test
-	public void givenItemThatGain1QualityWithAge_whenUpdate_thenQualityHigher() {
-		String name = "Aged Brie";
-		givenItem_whenUpdate_thenExpected(new Item(name, 1, 0),
-				new Item(name, 0, 1));
+	public void givenNormalItemAndNegativeSellIn_whenUpdate_thenQualityDecreasedBy2() {
+		TestBuilder.givenNormalItem().andNegativeSellIn().whenUpdate().thenQualityDecreasedBy(2);
 	}
 
 	@Test
-	public void givenItemThatGainQualityWithAge_whenUpdate_thenQualityNotMore50() {
-		String name = "Aged Brie";
-		givenItem_whenUpdate_thenExpected(new Item(name, 1, 50),
-				new Item(name, 0, 50));
+	public void givenNormalItemAndZeroQuality_whenUpdate_thenQualityNotNegative() {
+		TestBuilder.givenNormalItem().andQuality(0).whenUpdate().thenQualityNotNegative();
 	}
 
 	@Test
-	public void givenLegendaryItem_whenUpdate_thenSellInAndQualityNotChanged() {
-		String name = "Sulfuras, Hand of Ragnaros";
-		givenItem_whenUpdate_thenExpected(new Item(name, 1, 1),
-				new Item(name, 1, 1));
+	public void givenPositiveAlterationItem_whenUpdate_thenQualityIncreasedBy1() {
+		TestBuilder.givenPositiveAlterationItem().whenUpdate().thenQualityIncreasedBy(1);
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellInHigherThan10_whenUpdate_thenQualityIncreasedBy1() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(20, 1);
+	public void givenPositiveAlterationItemAndNegativeSellIn_whenUpdate_thenQualityIncreasedBy2() {
+		TestBuilder.givenPositiveAlterationItem().andNegativeSellIn().whenUpdate().thenQualityIncreasedBy(2);
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellIn10_whenUpdate_thenQualityIncreasedBy2() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(10, 2);
+	public void givenPositiveAlterationItemAndQuality50_whenUpdate_thenQualityNotGreaterThan50() {
+		TestBuilder.givenPositiveAlterationItem().andQuality(50).whenUpdate().thenQualityNotGreaterThan50();
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellIn6_whenUpdate_thenQualityIncreasedBy2() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(6, 2);
+	public void givenLegendaryItem_whenUpdate_thenItemNotChanged() {
+		TestBuilder.givenName("Sulfuras, Hand of Ragnaros").whenUpdate().thenItemNotChanged();
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellIn5_whenUpdate_thenQualityIncreasedBy3() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(5, 3);
+	public void givenBackstagePassesItemAndSellInMoreThan10_whenUpdate_thenQualityIncreasedBy1() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(11).whenUpdate().thenQualityIncreasedBy(1);
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellIn1_whenUpdate_thenQualityIncreasedBy3() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(1, 3);
+	public void givenBackstagePassesItemAndSellIn10_whenUpdate_thenQualityIncreasedBy2() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(10).whenUpdate().thenQualityIncreasedBy(2);
 	}
 
 	@Test
-	public void givenItemThatGainMoreQualityWithAgeAndSellIn0_whenUpdate_thenQualityIncreasedBy3() {
-		givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(0, 0);
+	public void givenBackstagePassesItemAndSellInBetween5And10_whenUpdate_thenQualityIncreasedBy2() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(6).whenUpdate().thenQualityIncreasedBy(2);
 	}
 
-	private static void givenItemThatGainMoreQualityWithAgeAndSellIn_whenUpdate_thenQualityIncreasedBy(int sellIn,
-																									   int increasedBy) {
-		String name = "Backstage passes to a TAFKAL80ETC concert";
-		givenItem_whenUpdate_thenExpected(new Item(name, sellIn, 0),
-				new Item(name, sellIn - 1, increasedBy));
+	@Test
+	public void givenBackstagePassesItemAndSellIn5_whenUpdate_thenQualityIncreasedBy3() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(5).whenUpdate().thenQualityIncreasedBy(3);
 	}
 
-	private static void givenItem_whenUpdate_thenExpected(Item given, Item expected) {
-		Item updated = performUpdate(given);
-
-		assertThat(updated.name).isEqualTo(expected.name);
-		assertThat(updated.sellIn).isEqualTo(expected.sellIn);
-		assertThat(updated.quality).isEqualTo(expected.quality);
+	@Test
+	public void givenBackstagePassesItemAndSellInBetween0And5_whenUpdate_thenQualityIncreasedBy3() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(1).whenUpdate().thenQualityIncreasedBy(3);
 	}
 
-	private static Item performUpdate(Item given) {
-		GildedRose gildedRose = new GildedRose(new Item[]{given});
+	@Test
+	public void givenBackstagePassesItemAndSellIn0_whenUpdate_thenQualityZero() {
+		TestBuilder.givenBackstagePassesItem().andSellIn(0).whenUpdate().thenQualityZero();
+	}
 
-		gildedRose.updateQuality();
+	private static class TestBuilder {
+		private final String name;
+		private int sellIn = DEFAULT_ITEM_VALUE;
+		private int quality = DEFAULT_ITEM_VALUE;
 
-		return gildedRose.items[0];
+		private Item result;
+
+		private TestBuilder(String itemName) {
+			this.name = itemName;
+		}
+
+		private static TestBuilder givenName(String value) {
+			return new TestBuilder(value);
+		}
+
+		private static TestBuilder givenNormalItem() {
+			return givenName("Normal item");
+		}
+
+		private static TestBuilder givenPositiveAlterationItem() {
+			return givenName("Aged Brie");
+		}
+
+		private static TestBuilder givenBackstagePassesItem() {
+			return givenName("Backstage passes to a TAFKAL80ETC concert");
+		}
+
+		private TestBuilder andSellIn(int value) {
+			this.sellIn = value;
+			return this;
+		}
+
+		private TestBuilder andNegativeSellIn() {
+			return andSellIn(-1);
+		}
+
+		private TestBuilder andZeroSellIn() {
+			return andSellIn(0);
+		}
+
+		private TestBuilder andQuality(int value) {
+			this.quality = value;
+			return this;
+		}
+
+		private TestBuilder whenUpdate() {
+			Item given = new Item(this.name, this.sellIn, this.quality);
+			GildedRose gildedRose = new GildedRose(new Item[]{given});
+
+			gildedRose.updateQuality();
+
+			this.result = gildedRose.items[0];
+			return this;
+		}
+
+		private void thenNameNotChangedAndSellInDecreasedBy1() {
+			assertThat(result.name).isEqualTo(this.name);
+			assertThat(result.sellIn).isEqualTo(this.sellIn - 1);
+		}
+
+		private void thenQualityEqualsTo(int expected) {
+			thenNameNotChangedAndSellInDecreasedBy1();
+			assertThat(result.quality).isEqualTo(expected);
+		}
+
+		private void thenQualityZero() {
+			thenNameNotChangedAndSellInDecreasedBy1();
+			assertThat(result.quality).isZero();
+		}
+
+		private void thenQualityChanged(int alterationValue) {
+			thenQualityEqualsTo(this.quality + alterationValue);
+		}
+
+		private void thenQualityIncreasedBy(int value) {
+			thenQualityChanged(value);
+		}
+
+		private void thenQualityDecreasedBy(int value) {
+			thenQualityChanged(-value);
+		}
+
+		private void thenQualityNotNegative() {
+			thenNameNotChangedAndSellInDecreasedBy1();
+			assertThat(result.quality).isNotNegative();
+		}
+
+		private void thenQualityNotGreaterThan50() {
+			thenNameNotChangedAndSellInDecreasedBy1();
+			assertThat(result.quality).isLessThanOrEqualTo(50);
+		}
+
+		private void thenItemNotChanged() {
+			assertThat(result.name).isEqualTo(this.name);
+			assertThat(result.sellIn).isEqualTo(this.sellIn);
+			assertThat(result.quality).isEqualTo(this.quality);
+		}
 	}
 }
