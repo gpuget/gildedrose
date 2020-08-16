@@ -9,20 +9,18 @@ public class BackstagePassesAlteration extends PositiveAlteration {
 
 	@Override
 	public void alterate(Item item) {
-		for (int i = 0; i < backstageQualityFactor(item); i++) {
-			super.alterate(item);
-		}
+		alterate(item, backstageAlterationValue(item));
 	}
 
-	private static int backstageQualityFactor(Item item) {
+	private static int backstageAlterationValue(Item item) {
 		if (item.sellIn < BACKSTAGE_LAST_LIMIT) {
-			return 0;
+			return -item.quality;
 		} else if (item.sellIn < BACKSTAGE_SECOND_LIMIT) {
-			return 3;
+			return 3 * QUALITY_DAMAGE;
 		} else if (item.sellIn < BACKSTAGE_FIRST_LIMIT) {
-			return 2;
+			return 2 * QUALITY_DAMAGE;
 		} else {
-			return 1;
+			return QUALITY_DAMAGE;
 		}
 	}
 }

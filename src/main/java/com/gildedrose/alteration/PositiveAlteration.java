@@ -5,6 +5,10 @@ import com.gildedrose.Item;
 public class PositiveAlteration implements ItemAlteration {
 	@Override
 	public void alterate(Item item) {
-		item.quality = Math.min(item.quality + QUALITY_DAMAGE, QUALITY_MAX);
+		alterate(item, QUALITY_DAMAGE);
+	}
+
+	protected void alterate(Item item, int alterationValue) {
+		item.quality = Math.min(item.quality + alterationValue, QUALITY_MAX);
 	}
 }

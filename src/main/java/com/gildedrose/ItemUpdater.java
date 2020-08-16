@@ -9,11 +9,10 @@ class ItemUpdater {
 	private static final int SELL_IN_LIMIT = 0;
 	private static final int SELL_IN_STEP = 1;
 
-	private static final String BACKSTAGE_PASSES_PREFIX = "Backstage passes";
-
 	private static final List<String> ITEMS_GAIN_QUALITY_WITH_AGE = List.of("Aged Brie");
 	private static final List<String> LEGENDARY_ITEMS = List.of("Sulfuras, Hand of Ragnaros");
 
+	private static final String BACKSTAGE_PASSES_PREFIX = "Backstage passes";
 	private static final String CONJURED_PREFIX = "Conjured";
 
 	static void update(Item[] items) {
@@ -41,14 +40,12 @@ class ItemUpdater {
 
 	private static ItemAlteration determineAlteration(Item item) {
 		if (ITEMS_GAIN_QUALITY_WITH_AGE.contains(item.name)) {
-			return positiveAlteration(item);
+			return new PositiveAlteration();
+		} else if (item.name.startsWith(BACKSTAGE_PASSES_PREFIX)) {
+			return new BackstagePassesAlteration();
 		} else {
 			return negativeAlteration(item);
 		}
-	}
-
-	private static ItemAlteration positiveAlteration(Item item) {
-		return (item.name.startsWith(BACKSTAGE_PASSES_PREFIX)) ? new BackstagePassesAlteration() : new PositiveAlteration();
 	}
 
 	private static ItemAlteration negativeAlteration(Item item) {
