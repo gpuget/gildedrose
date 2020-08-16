@@ -2,7 +2,7 @@ package com.gildedrose.alteration;
 
 import com.gildedrose.Item;
 
-public class BackstageAlteration extends GainAlteration {
+public class BackstagePassesAlteration extends PositiveAlteration {
 	private static final int BACKSTAGE_FIRST_LIMIT = 10;
 	private static final int BACKSTAGE_SECOND_LIMIT = 5;
 	private static final int BACKSTAGE_LAST_LIMIT = 0;

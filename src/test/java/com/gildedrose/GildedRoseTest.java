@@ -74,7 +74,17 @@ class GildedRoseTest {
 
 	@Test
 	public void givenBackstagePassesItemAndSellIn0_whenUpdate_thenQualityZero() {
-		TestBuilder.givenBackstagePassesItem().andSellIn(0).whenUpdate().thenQualityZero();
+		TestBuilder.givenBackstagePassesItem().andZeroSellIn().whenUpdate().thenQualityZero();
+	}
+
+	@Test
+	public void givenConjuredItem_whenUpdate_thenQualityDecreasedBy2() {
+		TestBuilder.givenConjuredItem().whenUpdate().thenQualityDecreasedBy(2);
+	}
+
+	@Test
+	public void givenConjuredItemAndNegativeSellIn_whenUpdate_thenQualityDecreasedBy2() {
+		TestBuilder.givenConjuredItem().andNegativeSellIn().whenUpdate().thenQualityDecreasedBy(4);
 	}
 
 	private static class TestBuilder {
@@ -102,6 +112,10 @@ class GildedRoseTest {
 
 		private static TestBuilder givenBackstagePassesItem() {
 			return givenName("Backstage passes to a TAFKAL80ETC concert");
+		}
+
+		private static TestBuilder givenConjuredItem() {
+			return givenName("Conjured Mana Cake");
 		}
 
 		private TestBuilder andSellIn(int value) {
