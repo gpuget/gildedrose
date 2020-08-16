@@ -44,7 +44,7 @@ class GildedRoseTest {
 
 	@Test
 	public void givenLegendaryItem_whenUpdate_thenItemNotChanged() {
-		TestBuilder.givenName("Sulfuras, Hand of Ragnaros").whenUpdate().thenItemNotChanged();
+		TestBuilder.givenLegendaryItem().whenUpdate().thenItemNotChanged();
 	}
 
 	@Test
@@ -108,6 +108,10 @@ class GildedRoseTest {
 
 		private static TestBuilder givenPositiveAlterationItem() {
 			return givenName("Aged Brie");
+		}
+
+		private static TestBuilder givenLegendaryItem() {
+			return givenName("Sulfuras, Hand of Ragnaros");
 		}
 
 		private static TestBuilder givenBackstagePassesItem() {
